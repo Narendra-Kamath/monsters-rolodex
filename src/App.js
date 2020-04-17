@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import CardList from './components/card-list/card-list.component';
+import { Header } from './components/header/header.component';
+
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      monsters: [],
+      searchFieldInput: ''
+    }
+
+    // this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+    .then(response => response.json())
+    .then(users => {
+      this.setState({ monsters : users }, () => { console.log(this.state) })
+    })
+
+  }
+  
+  handleChange = (e) => {
+    this.setState({ searchFieldInput: e.target.value })
+  }
+
+  render() {
+    const { monsters, searchFieldInput } = this.state
+    let filteredMonsters = monsters.filter((item) => {
+      return item.name.toLowerCase().includes(searchFieldInput)
+    })
+
+    return (
+      <div className="app-container">
+        <Header handleChange={this.handleChange}></Header>
+        <CardList monsters = {filteredMonsters}> 
+        </CardList>
+      </div>
+    )
+  }
 }
 
 export default App;
