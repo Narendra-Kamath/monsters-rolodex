@@ -21,6 +21,10 @@ class App extends Component {
     .then(response => response.json())
     .then(users => {
       this.setState({ monsters : users }, () => { console.log(this.state) })
+      // this.setState((prevState, prevProp) => {
+      //   // return { something: this.state.something + 1 } // instead of this
+      //   // return { something: prevState.something + 1 } // use this
+      // }) //to be used when the state value is used in set state
     })
 
   }
@@ -32,7 +36,7 @@ class App extends Component {
   render() {
     const { monsters, searchFieldInput } = this.state
     let filteredMonsters = monsters.filter((item) => {
-      return item.name.toLowerCase().includes(searchFieldInput)
+      return item.name.toLowerCase().includes(searchFieldInput.toLowerCase())
     })
 
     return (
